@@ -1,0 +1,60 @@
+eureka:
+  instance:
+    hostname: ${EUREKA_HOST_NAME:localhost}
+    lease-renewal-interval-in-seconds: 10
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVICE_URL_DEFAULT:http://localhost:8761/eureka/}
+server:
+  port: 0
+spring:
+  application:
+    name: sc-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      globalcors:
+        corsConfigurations:
+          [/**]:
+            allowedOrigins: *
+            allowedMethods: GET,POST,PUT,OPTIONS,DELETE
+            allowCredentials: true
+      loadbalancer:
+        use404: true
+      redis:
+        host: ${REDIS_HOSTNAME:localhost}
+        port: ${REDIS_PORT:6379}
+        password: ${REDIS_PASSWORD:redispass}
+      routes:
+        - id: router-service
+          url: lb://ROUTER-SERVICE
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:10000}
+                redis-rate-limiter.burstCapacity: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:20000}
+        - id: generator-service
+          url: lb://GENERATOR-SERVICE
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:1000}
+                redis-rate-limiter.burstCapacity: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:5000}
+        - id: users-service
+          url: lb://USERS-SERVICE
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: ${USERS_SERVICE_RATE_LIMITER_REPLENISH_RATE:200}
+                redis-rate-limiter.burstCapacity: ${USERS_SERVICE_RATE_LIMITER_REPLENISH_RATE:600}
+    loadbalancer:
+    ribbon:
+      enabled: false
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    reactor.netty.http.client.HttpClient: INFO

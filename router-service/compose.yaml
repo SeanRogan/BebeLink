@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=postgres-bebelink-router'
+      - 'POSTGRES_PASSWORD=postpass'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432'
