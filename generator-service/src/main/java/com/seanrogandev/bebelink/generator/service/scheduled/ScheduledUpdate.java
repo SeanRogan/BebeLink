@@ -14,13 +14,19 @@ public class ScheduledUpdate {
         this.template = template;
     }
 
+    /**
+     * Periodically updates expired URLs by executing a database stored procedure.
+     * The method is scheduled to run at a fixed rate of 12 hours (43200000 milliseconds).
+     *
+     * This scheduled task calls a stored procedure 'execute_update_active' within the database
+     * that is expected to update rows without returning any result set. It logs the number of rows
+     * updated or an error message if the execution fails.
+     */
     @Scheduled(fixedRate = 43200000)
     public void updateExpiredUrls() {
         template.getDatabaseClient()
                 .sql("CALL execute_update_active()")
-                .fetch()
-                .rowsUpdated()
-                .subscribe(count -> System.out.println("Function executed, rows updated: " + count),
-                        error -> System.err.println("Error executing function: " + error.getMessage()));
+                .then()
+                .subscribe();
     }
 }

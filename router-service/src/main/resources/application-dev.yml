@@ -21,11 +21,11 @@ spring:
   application:
     name: router-service
   r2dbc:
-    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://db:5432/postgres-bebelink-generator}
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://db:5432/postgres-bebelink-router}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postpass}
     pool:
-      initial-size: 5
-      max-size: 20
+      initial-size: 20
+      max-size: 60
       max-idle-time: 30m
 
