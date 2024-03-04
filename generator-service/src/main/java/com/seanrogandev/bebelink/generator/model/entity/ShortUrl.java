@@ -1,58 +1,52 @@
-package com.seanrogandev.bebelink.generator.entity;
+package com.seanrogandev.bebelink.generator.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
-@AllArgsConstructor
-@Builder
-@Entity
+@Accessors(chain = true)
 @Getter
 @Setter
-
-public class ShortUrl {
+@Table("url")
+public class ShortUrl implements Persistable<UUID> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false, unique = true)
-    private Long id;
+    @Column("id")
+    private UUID id;
     @NotEmpty
-    @Column(name = "origin_url", updatable = false, nullable = false, unique = true)
+    @Column("origin")
     private String origin;
     @NotEmpty
-    @Column(name = "shortened_url", updatable = false, nullable = false, unique = true)
-    private String url;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_on")
+    @Column("short_url")
+    private String shortUrl;
+    @Column("created_on")
     @CreatedDate
-    private Date createdOn;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_update")
+    private LocalDateTime createdOn;
+    @Column("last_updated")
     @LastModifiedDate
-    private Date lastUpdate;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expires;
+    private LocalDateTime lastUpdated;
+    @Column("expires")
+    private LocalDateTime expires;
+    @Column("active")
     private boolean active;
 
     public ShortUrl() {
+    }
 
+    @Override
+    public boolean isNew() {
+        return id == null;
     }
 }

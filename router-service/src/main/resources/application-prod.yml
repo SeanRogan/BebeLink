@@ -1,18 +1,15 @@
-feign:
-  client:
-    config:
-      feignName:
-        connectTimeout: 5000
-        readTimeout: 5000
-        loggerLevel: ${FEIGN_CLIENT_LOGGER_LEVEL:full} #options are : none,basic,headers,full
-        errorDecoder: com.example.SimpleErrorDecoder
-        retryer: com.example.SimpleRetryer
-        requestInterceptors:
-        # create a request interceptor for analytics
-        decode404: false
-        encoder: com.example.SimpleEncoder
-        decoder: com.example.SimpleDecoder
-        contract: com.example.SimpleContract
+app:
+  webclient:
+    services:
+      generator:
+        base-url: http://generator-service
+        connect-timeout: 5000
+        read-timeout: 10000
+      event-queue:
+        base-url: http://event-queue-service
+        connect-timeout: 5000
+        read-timeout: 10000
+
 eureka:
   instance:
     hostname: ${EUREKA_HOST_NAME:localhost}

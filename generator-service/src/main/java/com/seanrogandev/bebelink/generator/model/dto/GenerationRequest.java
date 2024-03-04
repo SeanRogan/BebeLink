@@ -1,4 +1,4 @@
-package com.seanrogandev.bebelink.generator.dto;
+package com.seanrogandev.bebelink.generator.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

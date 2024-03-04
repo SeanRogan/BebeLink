@@ -1,18 +1,22 @@
 package com.seanrogandev.bebelink.router.service.impl;
 
-import com.seanrogandev.bebelink.router.client.GeneratorServiceClient;
+import com.seanrogandev.bebelink.router.client.GeneratorServiceWebClient;
 import com.seanrogandev.bebelink.router.service.RedirectService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
-import java.util.concurrent.CompletableFuture;
-
-@AllArgsConstructor
 @Service
 @Slf4j
 public class RedirectServiceImpl implements RedirectService {
-    private final GeneratorServiceClient generatorServiceClient;
+
+    private GeneratorServiceWebClient generatorServiceClient;
+
+    @Autowired
+    public RedirectServiceImpl(GeneratorServiceWebClient webClient) {
+        this.generatorServiceClient = webClient;
+    }
     /**
      * Redirects to the original long-form URL based on the provided short URL path.
      *
@@ -26,12 +30,9 @@ public class RedirectServiceImpl implements RedirectService {
      *         cannot be found for the given path, indicating that the short URL may not exist or may have expired.
      */
     @Override
-    public CompletableFuture<String> redirect(String path) {
-
-        return CompletableFuture.supplyAsync(() -> {
-            log.info("retrieving long-form URL associated with tail: /" + path);
-            return generatorServiceClient.getOrigin(path)
-                    .orElseThrow(() -> new IllegalArgumentException("URL not found for: " + path));
-        });
+    public Mono<String> redirect(String path) {
+        log.info("Retrieving long-form URL associated with tail: /" + path);
+        return generatorServiceClient.getOrigin(path)
+                .switchIfEmpty(Mono.error(new Exception("URL not found for: " + path)));
     }
 }

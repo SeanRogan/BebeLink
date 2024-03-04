@@ -19,8 +19,8 @@ spring:
           enabled: true
       globalcors:
         corsConfigurations:
-          [/**]:
-            allowedOrigins: *
+          '[/**]':
+            allowedOrigins: "*"
             allowedMethods: GET,POST,PUT,OPTIONS,DELETE
             allowCredentials: true
       loadbalancer:
@@ -31,14 +31,14 @@ spring:
         password: ${REDIS_PASSWORD:redispass}
       routes:
         - id: router-service
-          url: lb://ROUTER-SERVICE
+          url: lb://router-service
           filters:
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter.replenishRate: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:100}
                 redis-rate-limiter.burstCapacity: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:200}
         - id: generator-service
-          url: lb://GENERATOR-SERVICE
+          url: lb://generator-service
           filters:
             - name: RequestRateLimiter
               args:
@@ -52,9 +52,9 @@ spring:
                 redis-rate-limiter.replenishRate: ${USERS_SERVICE_RATE_LIMITER_REPLENISH_RATE:2}
                 redis-rate-limiter.burstCapacity: ${USERS_SERVICE_RATE_LIMITER_REPLENISH_RATE:6}
     loadbalancer:
-    ribbon:
-      enabled: false
+      ribbon:
+        enabled: false
 logging:
   level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client.HttpClient: DEBUG
+    org.springframework.cloud.gateway: TRACE
+    reactor.netty.http.client.HttpClient: TRACE

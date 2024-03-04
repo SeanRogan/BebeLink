@@ -1,7 +1,7 @@
 package com.seanrogandev.bebelink.router.service;
+import reactor.core.publisher.Mono;
 
-import java.util.concurrent.CompletableFuture;
 
 public interface RedirectService {
-    CompletableFuture<String> redirect(String path);
+    Mono<String> redirect(String path);
 }

@@ -1,4 +1,4 @@
-package com.seanrogandev.bebelink.generator.dto;
+package com.seanrogandev.bebelink.generator.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 @Builder
 @Data
@@ -18,9 +20,9 @@ import java.util.Date;
  */
 public class GenerationResponse {
     private String url;
-    private Date expiration;
+    private LocalDateTime expiration;
     public GenerationResponse() {}
-    public GenerationResponse(String url, Date expiration) {
+    public GenerationResponse(String url, LocalDateTime expiration) {
         this.url = url;
         this.expiration = expiration;
     }
