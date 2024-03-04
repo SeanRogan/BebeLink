@@ -1,6 +1,7 @@
 package com.seanrogandev.bebelink.generator.repository;
 
 import com.seanrogandev.bebelink.generator.model.entity.ShortUrl;
+import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 
@@ -22,5 +23,6 @@ public interface UrlRepository extends ReactiveCrudRepository<ShortUrl, UUID> {
      * @param shortUrl the short-form url string used to look up the shortened URL object
      * @return a Mono containing the shortened URL if it exists
      */
+    @Query("SELECT origin FROM url WHERE short_url = :shortUrl")
     Mono<String> findOriginByShortUrl(String shortUrl);
 }
