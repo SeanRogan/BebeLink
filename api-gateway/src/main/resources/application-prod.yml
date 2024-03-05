@@ -1,60 +1,57 @@
 eureka:
   instance:
     hostname: ${EUREKA_HOST_NAME:localhost}
-    lease-renewal-interval-in-seconds: 10
+    instanceId: ${eureka.instance.hostname}:${spring.application.name}:${random.value}
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
       defaultZone: ${EUREKA_SERVICE_URL_DEFAULT:http://localhost:8761/eureka/}
+logging:
+  level:
+    root: ${LOGGING_LVL_ROOT:INFO}
 server:
   port: 0
 spring:
+  redis:
+    host: ${REDIS_HOSTNAME:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:redispass}
   application:
-    name: sc-gateway
+    name: ${SPRING_APPLICATION_NAME:sc-gateway}
   cloud:
     gateway:
       discovery:
         locator:
+          lower-case-service-id: true
           enabled: true
       globalcors:
         corsConfigurations:
-          [/**]:
-            allowedOrigins: *
+          '[/**]':
+            allowedOriginPatterns: "http://localhost/*"
             allowedMethods: GET,POST,PUT,OPTIONS,DELETE
             allowCredentials: true
-      loadbalancer:
-        use404: true
       redis:
         host: ${REDIS_HOSTNAME:localhost}
         port: ${REDIS_PORT:6379}
         password: ${REDIS_PASSWORD:redispass}
       routes:
         - id: router-service
-          url: lb://ROUTER-SERVICE
+          uri: http://router-service
+          predicates:
+            - Path=/router-service/**
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:10000}
-                redis-rate-limiter.burstCapacity: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:20000}
+                redis-rate-limiter.replenishRate: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:50}
+                redis-rate-limiter.burstCapacity: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:150}
         - id: generator-service
-          url: lb://GENERATOR-SERVICE
+          uri: http://generator-service
+          predicates:
+            - Path=/generator-service/**
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:1000}
-                redis-rate-limiter.burstCapacity: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:5000}
-        - id: users-service
-          url: lb://USERS-SERVICE
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: ${USERS_SERVICE_RATE_LIMITER_REPLENISH_RATE:200}
-                redis-rate-limiter.burstCapacity: ${USERS_SERVICE_RATE_LIMITER_REPLENISH_RATE:600}
-    loadbalancer:
-    ribbon:
-      enabled: false
-logging:
-  level:
-    org.springframework.cloud.gateway: INFO
-    reactor.netty.http.client.HttpClient: INFO
+                redis-rate-limiter.replenishRate: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:30}
+                redis-rate-limiter.burstCapacity: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:50}
+

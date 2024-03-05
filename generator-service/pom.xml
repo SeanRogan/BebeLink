@@ -35,6 +35,11 @@
 			<version>1.18.30</version>
 			<scope>compile</scope>
 		</dependency>
+		<!--WEB-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
 		<!--DATA-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -45,31 +50,21 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.postgresql/r2dbc-postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>r2dbc-postgresql</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/io.r2dbc/r2dbc-pool -->
 		<dependency>
 			<groupId>io.r2dbc</groupId>
 			<artifactId>r2dbc-pool</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/io.r2dbc/r2dbc-spi -->
 		<dependency>
 			<groupId>io.r2dbc</groupId>
 			<artifactId>r2dbc-spi</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.liquibase/liquibase-core &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>org.liquibase</groupId>-->
-<!--			<artifactId>liquibase-core</artifactId>-->
-<!--			<version>4.24.0</version>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
@@ -84,15 +79,6 @@
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-starter-security</artifactId>-->
 <!--		</dependency>-->
-		<!--REST-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
 		<!--TESTING-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

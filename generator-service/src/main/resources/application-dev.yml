@@ -1,4 +1,4 @@
-
+# Generator Service
 eureka:
   client:
     fetchRegistry: true
@@ -7,16 +7,11 @@ eureka:
     registerWithEureka: true
   instance:
     hostname: ${EUREKA_HOST_NAME:localhost}
+    instanceId: ${eureka.instance.hostname}:${spring.application.name}:${random.value}
+    prefer-ip-address: true
 logging:
   level:
-    root: DEBUG
-    org:
-      springframework:
-        dao: TRACE
-        data: TRACE
-        web: INFO
-        security: WARN
-
+    root: INFO
 server:
   port: ${SERVER_PORT:0}
 spring:

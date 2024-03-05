@@ -18,6 +18,17 @@
 		<spring-cloud.version>2023.0.0</spring-cloud.version>
 	</properties>
 	<dependencies>
+		<!--DEV TOOLS-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 		<!--REST-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -32,7 +43,7 @@
 		<!--MICROSERVICES-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-gateway-mvc</artifactId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
