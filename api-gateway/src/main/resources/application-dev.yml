@@ -13,10 +13,6 @@ logging:
 server:
   port: 0
 spring:
-  redis:
-    host: ${REDIS_HOSTNAME:localhost}
-    port: ${REDIS_PORT:6379}
-    password: ${REDIS_PASSWORD:redispass}
   application:
     name: ${SPRING_APPLICATION_NAME:sc-gateway}
   cloud:
@@ -54,4 +50,12 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:30}
                 redis-rate-limiter.burstCapacity: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:50}
-
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      key-serializer: org.apache.kafka-common.serialization.String-Serializer
+      value-serializer: org.apache.kafka-common.serialization.String-Serializer
+  redis:
+    host: ${REDIS_HOSTNAME:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:redispass}

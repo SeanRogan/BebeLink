@@ -43,8 +43,8 @@ spring:
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:50}
-                redis-rate-limiter.burstCapacity: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:150}
+                redis-rate-limiter.replenishRate: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:300}
+                redis-rate-limiter.burstCapacity: ${ROUTER_SERVICE_RATE_LIMITER_REPLENISH_RATE:600}
         - id: generator-service
           uri: http://generator-service
           predicates:

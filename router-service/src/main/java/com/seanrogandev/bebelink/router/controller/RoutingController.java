@@ -37,8 +37,6 @@ public class RoutingController {
     @GetMapping("/{path}")
     public Mono<ResponseEntity<Object>> redirect(@PathVariable String path, ServerWebExchange exchange) {
         log.info("redirect requested for {domain}/" + path);
-        //send event info to event queue
-        captureEvent(exchange);
         //invoke redirect service,
         // map successful response to a 302 redirect response entity,
         // otherwise return a 500 Error code.
@@ -54,11 +52,4 @@ public class RoutingController {
                         .body("Error during redirect" + err.getMessage())));
 
     }
-
-    //todo create method to send captured info to event queue
-    private void captureEvent(ServerWebExchange exchange) {
-        //create a DTO of the exchange data
-        //use the EventQueueServiceWebClient to send it to the queue
-    }
-
 }

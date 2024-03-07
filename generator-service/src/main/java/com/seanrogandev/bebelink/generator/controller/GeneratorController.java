@@ -3,6 +3,7 @@ package com.seanrogandev.bebelink.generator.controller;
 import com.seanrogandev.bebelink.generator.model.dto.GenerationRequest;
 import com.seanrogandev.bebelink.generator.model.dto.GenerationResponse;
 import com.seanrogandev.bebelink.generator.service.GeneratorService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class GeneratorController {
      * @return the generated URL and the URL expiration date
      */
     @PostMapping("/generate")
-    public Mono<ResponseEntity<GenerationResponse>> generateNewUrl(@RequestBody GenerationRequest generationRequest) {
+    public Mono<ResponseEntity<GenerationResponse>> generateNewUrl(@RequestBody @Valid GenerationRequest generationRequest) {
         log.info("/generate endpoint hit...");
         return generatorService.generate(generationRequest)
                 .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response))
