@@ -4,8 +4,8 @@ import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { theme } from "../theme";
 
 export const metadata = {
-  title: "Mantine Next.js template",
-  description: "I am using Mantine with Next.js!",
+  title: "Bebe.Link - The URL shortener of your dreams!",
+  description: "URL shortener for creators and marketers to create connections with their audience.",
 };
 
 export default function RootLayout({ children }: { children: any }) {
