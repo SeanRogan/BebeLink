@@ -1,8 +1,7 @@
-package com.seanrogandev.bebelink.router.service.impl;
+package com.seanrogandev.bebelink.router.service;
 
 import com.seanrogandev.bebelink.router.client.GeneratorServiceWebClient;
 import com.seanrogandev.bebelink.router.exception.UrlNotFoundException;
-import com.seanrogandev.bebelink.router.service.RedirectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import reactor.core.publisher.Mono;
  */
 @Service
 @Slf4j
-public class RedirectServiceImpl implements RedirectService {
+public class RedirectService {
 
     private GeneratorServiceWebClient generatorServiceClient;
     /**
@@ -25,7 +24,7 @@ public class RedirectServiceImpl implements RedirectService {
      * @param webClient The web client used to communicate with the generator service.
      */
     @Autowired
-    public RedirectServiceImpl(GeneratorServiceWebClient webClient) {
+    public RedirectService(GeneratorServiceWebClient webClient) {
         this.generatorServiceClient = webClient;
     }
     /**
@@ -40,7 +39,7 @@ public class RedirectServiceImpl implements RedirectService {
      *         The future completes exceptionally with an IllegalArgumentException if the original URL
      *         cannot be found for the given path, indicating that the short URL may not exist or may have expired.
      */
-    @Override
+
     public Mono<String> redirect(String path) {
         log.info("Retrieving long-form URL associated with tail: /" + path);
         return generatorServiceClient.getOrigin(path)

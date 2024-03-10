@@ -49,7 +49,7 @@ public class RoutingController {
                         .header("Location", origin)
                         .build())
                 .onErrorResume(err -> Mono.just(ResponseEntity.internalServerError()
-                        .body("Error during redirect" + err.getMessage())));
+                            .body("Error during redirect" + err.getMessage())));
 
     }
 }
