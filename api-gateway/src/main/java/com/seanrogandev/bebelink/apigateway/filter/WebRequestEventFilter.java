@@ -1,40 +1,37 @@
 package com.seanrogandev.bebelink.apigateway.filter;
 
+import com.seanrogandev.bebelink.apigateway.model.RoutingEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @Component
 @Slf4j
 public class WebRequestEventFilter implements WebFilter {
-    private final ReactiveKafkaProducerTemplate<String, String> template;
-    private String topicName = "routing-event";
+    private final ReactiveKafkaProducerTemplate<String, RoutingEvent> template;
+    private String routingTopic = "routing-event";
+    private String generationTopic = "generate-event";
+    private String registrationTopic = "register-event";
 
     @Autowired
-    public WebRequestEventFilter(ReactiveKafkaProducerTemplate<String, String> template) {
+    public WebRequestEventFilter(ReactiveKafkaProducerTemplate<String, RoutingEvent> template) {
         this.template = template;
     }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        // Prepare the data to be sent, but don't send it yet.
-        // Corrected to use SenderResult<Void> to match the return type of ReactiveKafkaProducerTemplate.send
+        String requestPath = exchange.getRequest().getPath().toString();
 
-
-        // Chain the Kafka send operation with the web filter chain.
         // Using then() to ignore the send result and continue with the filter chain
         // only after the send operation completes successfully.
-        return template.send(topicName, extractData(exchange.getRequest()))
+        return template.send(routingTopic, extractData(exchange.getRequest()))
+                .log("request from: " + requestPath + "  :sent to routing topic.")
                 .then(chain.filter(exchange)) // Continue with the chain after send completes
                 .onErrorResume(e -> {
                     // Log or handle the error gracefully
@@ -43,10 +40,14 @@ public class WebRequestEventFilter implements WebFilter {
                 });
     }
 
-    private String extractData(ServerHttpRequest request) {
-        String requestPath = request.getPath().toString();
-        String localAdd = request.getLocalAddress().toString();
-        String remoteAdd = request.getRemoteAddress().toString();
+
+
+    private RoutingEvent extractData(ServerHttpRequest request) {
+        return new RoutingEvent().builder()
+                .requestPath(request.getPath().toString())
+                .localAddress(request.getLocalAddress().toString())
+                .remoteAddress(request.getRemoteAddress().toString())
+                .build();
 
     }
 

@@ -52,9 +52,20 @@ spring:
                 redis-rate-limiter.burstCapacity: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:50}
   kafka:
     producer:
+      acks: all
+      retries: 5
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
       key-serializer: org.apache.kafka-common.serialization.String-Serializer
       value-serializer: org.apache.kafka-common.serialization.String-Serializer
+      properties:
+        delivery:
+          timeout:
+            ms: ${KAFKA_PRODUCER_DELIVERY_TIMEOUT:10000}
+        linger:
+          ms: ${KAFKA_PRODUCER_LINGER:1000}
+        request:
+          timeout:
+            ms: ${KAFKA_PRODUCER_REQUEST_TIMEOUT:5000}
   redis:
     host: ${REDIS_HOSTNAME:localhost}
     port: ${REDIS_PORT:6379}
