@@ -1,0 +1,172 @@
+version: '3.8'
+services:
+
+####eureka microservices discovery server
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    #map external:internal ports
+    ports:
+      - "8080:8080"
+    #create environment variables
+    environment:
+      - SPRING_ACTIVE_PROFILE=dev
+
+####api gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    #map external:internal ports
+    ports:
+      - "8080:8080"
+    #create environment variables
+    environment:
+      - SPRING_ACTIVE_PROFILE=dev
+    depends_on:
+      - eureka-server
+      - kafka
+      - router-cache
+  gateway-cache:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    #declare data storage location
+    volumes:
+      - gateway-cache-data:/var/lib/redis/data
+####analytics service
+  analytics-service:
+    build:
+      context: ./analytics-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_ACTIVE_PROFILE=dev
+    depends_on:
+      - eureka-server
+      - kafka
+      - api-gateway
+
+####generator service
+  generator-service:
+    build:
+      context: ./generator-service
+      dockerfile: Dockerfile
+    #map external:internal ports
+    ports:
+      - "8080:8080"
+    #create environment variables
+    environment:
+      - SPRING_ACTIVE_PROFILE=dev
+    #dependency services
+    depends_on:
+      - generator-db
+      - eureka-server
+      - kafka
+  generator-db:
+    #use a standard postgres image =
+    image: postgres:latest
+    environment:
+      #set environment variables
+      POSTGRES_DB: postgres-bebelink-generator
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postpass
+    ports:
+      - "5432:5432"
+    #declare data storage location
+    volumes:
+      - generator-db-data:/var/lib/postgresql/data
+
+####router service
+  router-service:
+    build:
+      context: ./router-service
+      dockerfile: Dockerfile
+    #map external:internal ports
+    ports:
+      - "8080:8080"
+    #create environment variables
+    environment:
+      - SPRING_ACTIVE_PROFILE=dev
+    #dependency services
+    depends_on:
+      - eureka-server
+      - router-cache
+  router-cache:
+      image: redis:latest
+      ports:
+        - "6379:6379"
+    #declare data storage location
+    volumes:
+      - router-cache-data:/var/lib/redis/data
+
+####user service
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_ACTIVE_PROFILE=dev
+    depends_on:
+      - eureka-server
+      - kafka
+      - user-service-db
+  user-service-db:
+    image: postgres:latest
+    environment:
+      #set environment variables
+      POSTGRES_DB: postgres-bebelink-user-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - user-service-data:/var/lib/postgresql/data
+
+#### UI client
+  nextjs-app:
+    build:
+      context: ./peak-conditions
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_SERVER_HOSTNAME: http://localhost:8080
+
+#### Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK:TIME: 2000
+    ports:
+      - "22181:2181"
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      #KAFKA_CREATE_TOPICS: "routing-event:1:1"
+      KAFKA_LISTENERS: INSIDE://kafka:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+
+
+#create volumes for data-storage
+volumes:
+  gateway-cache-data:
+  generator-db-data:
+  router-cache-data:
+  user-service-data:
