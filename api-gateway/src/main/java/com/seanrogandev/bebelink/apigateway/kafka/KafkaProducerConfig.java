@@ -32,7 +32,7 @@ public class KafkaProducerConfig {
     private Integer requestTimeout;
 
     @Bean
-    public ReactiveKafkaProducerTemplate<String, RoutingEvent> kafkaTemplate() {
+    public ReactiveKafkaProducerTemplate<String, RoutingEvent> kafkaProducerTemplate() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);

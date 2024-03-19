@@ -55,8 +55,8 @@ spring:
       acks: all
       retries: 5
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-      key-serializer: org.apache.kafka-common.serialization.String-Serializer
-      value-serializer: org.apache.kafka-common.serialization.String-Serializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
         delivery:
           timeout:
