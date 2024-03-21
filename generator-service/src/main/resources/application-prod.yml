@@ -9,18 +9,15 @@ eureka:
     hostname: ${EUREKA_HOST_NAME:localhost}
 server:
   port: ${SERVER_PORT:0}
-
 spring:
-mvn
-  datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/postgres-bebelink-generator}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postpass}
   application:
     name: generator-service
-  jpa:
-    hibernate:
-      ddl-auto: ${SPRING_DATA_DDL_AUTO:create}
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+  r2dbc:
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://db:5432/postgres-bebelink-generator}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postpass}
+    pool:
+      enabled: true
+      initial-size: 20
+      max-size: 100
+      max-idle-time: 250m

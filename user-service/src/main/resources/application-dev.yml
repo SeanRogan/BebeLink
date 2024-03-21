@@ -1,13 +1,13 @@
 eureka:
-  instance:
-    hostname: ${EUREKA_HOST_NAME:localhost}
-    instanceId: ${eureka.instance.hostname}:${spring.application.name}:${random.value}
-    prefer-ip-address: true
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: ${EUREKA_SERVICE_URL_DEFAULT:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVICE_URL_DEFAULT:http://eureka-server:8761/eureka/}
+  instance:
+    hostname: ${EUREKA_HOST_NAME:localhost}
+    instanceId: ${eureka.instance.hostname}:${spring.application.name}:${random.value}
+    prefer-ip-address: true
 
 logging:
   level:
@@ -22,7 +22,7 @@ spring:
     restart:
       enabled: true
   r2dbc:
-    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://db:5432/postgres-bebelink-user}
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://user-service-db:5432/postgres-bebelink-user-service}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postpass}
     pool:

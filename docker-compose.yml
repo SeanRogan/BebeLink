@@ -8,46 +8,45 @@ services:
       dockerfile: Dockerfile
     #map external:internal ports
     ports:
-      - "8080:8080"
-    #create environment variables
-    environment:
-      - SPRING_ACTIVE_PROFILE=dev
+      - "8761:8761"
 
-####api gateway
-  api-gateway:
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
-    #map external:internal ports
-    ports:
-      - "8080:8080"
-    #create environment variables
-    environment:
-      - SPRING_ACTIVE_PROFILE=dev
-    depends_on:
-      - eureka-server
-      - kafka
-      - router-cache
-  gateway-cache:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-    #declare data storage location
-    volumes:
-      - gateway-cache-data:/var/lib/redis/data
 ####analytics service
   analytics-service:
     build:
       context: ./analytics-service
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8082:8080"
     environment:
       - SPRING_ACTIVE_PROFILE=dev
     depends_on:
       - eureka-server
       - kafka
-      - api-gateway
+
+  ####api gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    #map external:internal ports
+    ports:
+      - "8081:8080"
+    #create environment variables
+    environment:
+      - SPRING_ACTIVE_PROFILE=dev
+      - REDIS_HOSTNAME=gateway_cache
+    depends_on:
+      - eureka-server
+      - kafka
+      - gateway-cache
+  gateway-cache:
+    image: redis:latest
+    ports:
+      - "6378:6379"
+    #declare data storage location
+    volumes:
+      - gateway-cache-data:/var/lib/redis/data
+
 
 ####generator service
   generator-service:
@@ -56,7 +55,7 @@ services:
       dockerfile: Dockerfile
     #map external:internal ports
     ports:
-      - "8080:8080"
+      - "8083:8080"
     #create environment variables
     environment:
       - SPRING_ACTIVE_PROFILE=dev
@@ -74,7 +73,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postpass
     ports:
-      - "5432:5432"
+      - "5433:5432"
     #declare data storage location
     volumes:
       - generator-db-data:/var/lib/postgresql/data
@@ -86,21 +85,13 @@ services:
       dockerfile: Dockerfile
     #map external:internal ports
     ports:
-      - "8080:8080"
+      - "8084:8080"
     #create environment variables
     environment:
       - SPRING_ACTIVE_PROFILE=dev
     #dependency services
     depends_on:
       - eureka-server
-      - router-cache
-  router-cache:
-      image: redis:latest
-      ports:
-        - "6379:6379"
-    #declare data storage location
-    volumes:
-      - router-cache-data:/var/lib/redis/data
 
 ####user service
   user-service:
@@ -108,7 +99,7 @@ services:
       context: ./user-service
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8085:8080"
     environment:
       - SPRING_ACTIVE_PROFILE=dev
     depends_on:
@@ -123,26 +114,26 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postpass
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - user-service-data:/var/lib/postgresql/data
 
-#### UI client
-  nextjs-app:
-    build:
-      context: ./peak-conditions
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      NEXT_PUBLIC_SERVER_HOSTNAME: http://localhost:8080
+##### UI client
+#  nextjs-app:
+#    build:
+#      context: ./peak-conditions
+#      dockerfile: Dockerfile
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      NEXT_PUBLIC_SERVER_HOSTNAME: http://localhost:8080
 
 #### Kafka
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK:TIME: 2000
+      ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "22181:2181"
   kafka:
@@ -152,6 +143,7 @@ services:
       - zookeeper
     ports:
       - "29092:29092"
+      - "9093:9093"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -162,11 +154,8 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-
-
 #create volumes for data-storage
 volumes:
   gateway-cache-data:
   generator-db-data:
-  router-cache-data:
   user-service-data:
