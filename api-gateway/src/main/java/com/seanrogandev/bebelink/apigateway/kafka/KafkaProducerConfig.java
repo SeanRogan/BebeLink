@@ -30,7 +30,6 @@ public class KafkaProducerConfig {
     private Integer linger;
     @Value("${spring.kafka.producer.properties.request.timeout.ms}")
     private Integer requestTimeout;
-
     @Bean
     public ReactiveKafkaProducerTemplate<String, RoutingEvent> kafkaProducerTemplate() {
         Map<String, Object> props = new HashMap<>();

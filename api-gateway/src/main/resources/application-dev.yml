@@ -10,9 +10,9 @@ eureka:
     prefer-ip-address: true
 logging:
   level:
-    root: ${LOGGING_LVL_ROOT:INFO}
+    root: ${LOGGING_LVL_ROOT:TRACE}
 server:
-  port: 0
+  port: ${SERVER_PORT:8080}
 spring:
   application:
     name: ${SPRING_APPLICATION_NAME:sc-gateway}
@@ -25,11 +25,11 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOriginPatterns: "http://localhost/*"
+            allowedOriginPatterns: "*"
             allowedMethods: GET,POST,PUT,OPTIONS,DELETE
             allowCredentials: true
       redis:
-        host: ${REDIS_HOSTNAME:localhost}
+        host: ${REDIS_HOSTNAME:gateway-cache}
         port: ${REDIS_PORT:6379}
         password: ${REDIS_PASSWORD:redispass}
       routes:
@@ -52,10 +52,11 @@ spring:
                 redis-rate-limiter.replenishRate: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:30}
                 redis-rate-limiter.burstCapacity: ${GENERATOR_SERVICE_RATE_LIMITER_REPLENISH_RATE:50}
   kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     producer:
       acks: all
       retries: 5
-      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
@@ -72,6 +73,6 @@ spring:
             trusted:
               packages: "*"
   redis:
-    host: ${REDIS_HOSTNAME:localhost}
+    host: ${REDIS_HOSTNAME:gateway-cache}
     port: ${REDIS_PORT:6379}
     password: ${REDIS_PASSWORD:redispass}

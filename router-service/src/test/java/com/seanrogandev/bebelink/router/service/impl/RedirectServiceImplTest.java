@@ -1,6 +1,7 @@
 package com.seanrogandev.bebelink.router.service.impl;
 
 import com.seanrogandev.bebelink.router.client.GeneratorServiceWebClient;
+import com.seanrogandev.bebelink.router.service.RedirectService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 class RedirectServiceImplTest {
 
-    private RedirectServiceImpl redirectService;
+    private RedirectService redirectService;
     private GeneratorServiceWebClient mockWebClient;
     //util method
    // public static class Base64Util {
@@ -33,7 +34,7 @@ class RedirectServiceImplTest {
     @BeforeEach
     void setUp() {
         mockWebClient = Mockito.mock(GeneratorServiceWebClient.class);
-        redirectService = new RedirectServiceImpl(mockWebClient);
+        redirectService = new RedirectService(mockWebClient);
     }
 
     @Test
