@@ -1,4 +1,4 @@
-package com.seanrogandev.bebelink.generator.service.scheduled;
+package com.seanrogandev.bebelink.generator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
