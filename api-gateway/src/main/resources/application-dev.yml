@@ -58,7 +58,7 @@ spring:
       retries: 5
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         delivery:
           timeout:
@@ -70,6 +70,8 @@ spring:
             ms: ${KAFKA_PRODUCER_REQUEST_TIMEOUT:5000}
         spring:
           json:
+            type:
+              mapping: 'routingEvent:com.seanrogandev.bebelink.apigateway.model.RoutingEvent'
             trusted:
               packages: "*"
   redis:

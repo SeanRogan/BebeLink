@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 public class WebRequestEventFilter implements WebFilter {
-    private final ReactiveKafkaProducerTemplate<String, RoutingEvent> template;
+    private final ReactiveKafkaProducerTemplate<String, RoutingEvent > template;
     private String routingTopic = "routing-event";
     private String generationTopic = "generate-event";
     private String registrationTopic = "register-event";

@@ -3,7 +3,6 @@ package com.seanrogandev.bebelink.apigateway.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @AllArgsConstructor
 @Builder
