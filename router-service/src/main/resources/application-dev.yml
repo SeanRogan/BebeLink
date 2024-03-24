@@ -18,7 +18,7 @@ eureka:
     prefer-ip-address: true
 logging:
   level:
-    root: INFO
+    root: TRACE
 server:
   port: ${SERVER_PORT:0}
 spring:

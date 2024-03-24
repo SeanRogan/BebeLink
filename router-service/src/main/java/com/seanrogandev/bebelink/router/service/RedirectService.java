@@ -41,7 +41,7 @@ public class RedirectService {
      */
 
     public Mono<String> redirect(String path) {
-        log.info("Retrieving long-form URL associated with tail: /" + path);
+        log.info("Retrieving long-form URL : " + path);
         return generatorServiceClient.getOrigin(path)
                 .switchIfEmpty(Mono.error(new UrlNotFoundException("URL not found for: " + path)));
     }

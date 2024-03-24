@@ -3,7 +3,9 @@ package com.seanrogandev.bebelink.router.config;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
 /**
  * Configuration class for WebClient.
@@ -17,13 +19,15 @@ public class WebClientConfig {
 
     /**
      * Creates a {@link WebClient.Builder} bean with load-balanced capabilities.
+     * We configure the HttpClient to NOT follow redirects internally so that they are passed back to the client.
      *
      * @return A load-balanced {@link WebClient.Builder} instance.
      */
     @Bean
     @LoadBalanced
     public WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
+        HttpClient httpClient = HttpClient.create().followRedirect(false);
+        return WebClient.builder().clientConnector(new ReactorClientHttpConnector(httpClient));
     }
 
 }

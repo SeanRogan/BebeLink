@@ -34,9 +34,9 @@ public class RoutingController {
      * @return A {@link Mono} containing a {@link ResponseEntity} that either redirects the client to the
      * original URL or indicates an error with an appropriate HTTP status code.
      */
-    @GetMapping("/{path}")
+    @GetMapping("/route/{path}")
     public Mono<ResponseEntity<Object>> redirect(@PathVariable String path, ServerWebExchange exchange) {
-        log.info("redirect requested for {domain}/" + path);
+        log.info("redirect requested for " + path);
         //invoke redirect service,
         // map successful response to a 302 redirect response entity,
         // otherwise return a 500 Error code.

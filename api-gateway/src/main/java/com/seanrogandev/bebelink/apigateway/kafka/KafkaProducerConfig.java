@@ -12,7 +12,12 @@ import reactor.kafka.sender.SenderOptions;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Configuration class for Kafka producer settings.
+ * <p>
+ * This class configures a ReactiveKafkaProducerTemplate for sending messages to Kafka topics.
+ * It also includes configuration for creating a Kafka topic if it doesn't already exist.
+ */
 @Configuration
 
 public class KafkaProducerConfig {
@@ -30,6 +35,11 @@ public class KafkaProducerConfig {
     private Integer linger;
     @Value("${spring.kafka.producer.properties.request.timeout.ms}")
     private Integer requestTimeout;
+    /**
+     * Creates a ReactiveKafkaProducerTemplate bean for producing RoutingEvent messages.
+     *
+     * @return a configured instance of ReactiveKafkaProducerTemplate
+     */
     @Bean
     public ReactiveKafkaProducerTemplate<String, RoutingEvent> kafkaProducerTemplate() {
         Map<String, Object> props = new HashMap<>();
@@ -45,7 +55,11 @@ public class KafkaProducerConfig {
 
         return new ReactiveKafkaProducerTemplate<>(SenderOptions.create(props));
     }
-
+    /**
+     * Configures and creates a new topic for routing events if it doesn't already exist.
+     *
+     * @return a NewTopic instance representing the routing event topic
+     */
     @Bean
     public NewTopic createRoutingTopic() {
         return (TopicBuilder.name("routing-event-topic")

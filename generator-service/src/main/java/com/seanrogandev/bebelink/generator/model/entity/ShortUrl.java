@@ -31,7 +31,7 @@ public class ShortUrl implements Persistable<UUID> {
     @NotEmpty
     @Column("short_url")
     private String shortUrl;
-    @Column("create_date")
+    @Column("created_on")
     @CreatedDate
     private LocalDateTime createDate;
     @Column("last_updated")

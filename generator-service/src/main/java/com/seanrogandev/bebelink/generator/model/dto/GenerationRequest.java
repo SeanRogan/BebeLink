@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 /**
  * A DTO Class representing the request for a shortened URL
@@ -16,5 +17,6 @@ import lombok.Setter;
 @Setter
 
 public class GenerationRequest {
+    @URL(message = "Request must be a valid URL")
     String longFormUrl;
 }

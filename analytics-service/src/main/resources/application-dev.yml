@@ -32,8 +32,10 @@ spring:
           json:
             trusted:
               packages: "*"
+            type:
+              mapping: "routingEvent:com.seanrogandev.bebelink.analyticsservice.model.RoutingEvent"
             use:
               type:
                 headers: false
             value:
-              default: com.seanrogandev.bebelink.analyticsservice.model.RoutingEvent
+              default: "com.seanrogandev.bebelink.analyticsservice.model.RoutingEvent"
