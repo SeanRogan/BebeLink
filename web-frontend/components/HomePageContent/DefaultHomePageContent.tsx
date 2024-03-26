@@ -1,12 +1,10 @@
 'use client';
-import {AppShell, Button, Center, Divider, Group, Image, Space, Stack, Text, Title} from "@mantine/core";
+import {AppShell, Button, Center, Divider, Group, Space, Stack, Title} from "@mantine/core";
 import React, {useEffect, useState} from "react";
 import {useAuthContext} from "@/app/context/AuthContext";
 import DefaultNavBar from "@/components/DynamicNavbar/DefaultNavBar";
 
 import '@mantine/carousel/styles.css';
-import DefaultDemo from "@/components/Demo/DefaultDemo";
-import SearchBar from "@/components/Search/SearchBar";
 import {NavigationProps} from "@/app/util/types";
 
 export default function DefaultHomePageContent({onNavigate}: NavigationProps) {
@@ -24,8 +22,7 @@ export default function DefaultHomePageContent({onNavigate}: NavigationProps) {
     }, [checkForLogin]);
 
     const handleBtnClick = () => {
-        setButtonVisible(false);
-        setDemoActive(true);
+        //implement logic to save field data and move on to account signup,
     }
 
     return (<>{checkForLogin && (<>
@@ -37,67 +34,27 @@ export default function DefaultHomePageContent({onNavigate}: NavigationProps) {
                 </AppShell.Header>
                 <AppShell.Main>
 
-                    <Center>
+                        <Title order={3} size="7rem">Share!</Title>
+                        <Title order={2} size="9rem">Engage!</Title>
+                        <Title order={1} size="12rem">Connect!</Title>
 
-                        <Stack align={"flex-start"}>
-                            <Title order={1}>Don't get caught in poor conditions!</Title>
-                            <Title order={4}>Traditional weather apps only track the forecast for nearby towns.</Title>
-                            <Text style={{textAlign: "center", margin: "auto", width: "30vw"}}>
-                                Peak Conditions is a different kind of weather app. Made for adventures,
-                                this app is designed to track the weather conditions at higher elevations
-                                where the average weather app fails. Stay safe in the back country by knowing
-                                exactly what weather you will encounter on your trip.
-                            </Text>
-                            <Image radius="md"
-                                   src={"/mountainDusk.jpg"}
-                                   h={200}
-                                   fallbackSrc="https://placehold.co/600x400?text=Placeholder"/>
-                        </Stack>
-                    </Center>
+                    <Divider/>
+                    {/*LINK DEMO CARD COMPONENT*/}
+                    <Divider/>
+                    {/*PRICING CARD*/}
+                    <Space h={"lg"}/>
 
-                    <Space h={"lg"}/>
-                    <Center>
-                        <Title>View the daily forecast of popular mountain tops</Title>
-                    </Center>
-                    <Space h={"lg"}/>
                     <Divider/>
                     <Space h={"lg"}/>
-                    <Center>
-                        {buttonVisible && (
+                        <Center>
                             <>
                                 <Button onClick={() => handleBtnClick()}>
-                                    Click to see the demo
+                                    Claim your link!
                                 </Button>
                                 <Space h={"xl"}/>
-                            </>)}
-                        {demoActive && (
-                            <>
-                                <Space/>
-                                <DefaultDemo/>
                             </>
-                        )}
-                    </Center>
-                    <Center>
-                        <Group>
-                            <Center>
-                                <Title order={1}>Find your happy place!</Title>
-                            </Center>
-                            <Center>
-                                <SearchBar onNavigate={onNavigate}/>
-                            </Center>
-                        </Group>
-                    </Center>
-                    <Center>
-                        <Title order={4}>Search from over 10,000 mountains from across the globe.</Title>
-                    </Center>
-                    <Center>
-                        <Text style={{textAlign: "center", width: "50vw"}}>
-                            We collect data for most mountain ranges across the world.
-                            Search mountain peaks by name, or by the name of the mountain range.
-                            See the current daily forecast for any mountain, or browse the peaks that make up your
-                            favorite range.
-                        </Text>
-                    </Center>
+                        </Center>
+
                 </AppShell.Main>
             </AppShell></>)}</>
     );
