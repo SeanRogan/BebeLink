@@ -5,14 +5,8 @@ import DefaultHomePageContent from "@/components/HomePageContent/DefaultHomePage
 import AuthenticatedHomePageContent from "@/components/HomePageContent/AuthenticatedHomePageContent";
 import Login from "@/components/Login/Login";
 import Registration from "@/components/Registration/Registration";
-import FavoritesPage from "@/components/FavoritesPage/FavoritesPage";
-import SearchForecastPage from "@/components/Forecast/SearchForecastPage";
-import {SearchProvider} from "@/app/context/SearchContext";
-import {ForecastProvider} from "@/app/context/ForecastContext";
 import '@mantine/carousel/styles.css';
-import {UserReportProvider} from "@/app/context/UserReportContext";
-import UserForecastPage from "@/components/Forecast/UserForecastPage";
-import {FavoritesProvider} from "@/app/context/FavoritesContext";
+
 
 export default function LandingPage() {
     const [currentPage, setCurrentPage] = useState('home');
@@ -22,40 +16,28 @@ export default function LandingPage() {
 
     return (<>
         <AuthProvider>
-            <SearchProvider>
-                <ForecastProvider>
-                    <UserReportProvider>
-                        <FavoritesProvider>
 
-                        {currentPage === 'home' && (
-                            <DefaultHomePageContent
-                                onNavigate={navigate}
-                            />
-                        )}
-                        {currentPage === 'login' && (
-                            <Login
-                                onNavigate={navigate}
-                            />
-                        )}
-                        {currentPage === 'authenticatedHome' && (
-                            <AuthenticatedHomePageContent
-                                onNavigate={navigate}
-                            />
-                        )}
-                        {currentPage === 'register' && (
-                            <Registration
-                                onNavigate={navigate}
-                            />
-                        )}
-                        {currentPage === 'favorites' && (
-                            <FavoritesPage
-                                onNavigate={navigate}
-                            />
-                        )}
-                        </FavoritesProvider>
-                    </UserReportProvider>
-                </ForecastProvider>
-            </SearchProvider>
+                            {currentPage === 'home' && (
+                                <DefaultHomePageContent
+                                    onNavigate={navigate}
+                                />
+                            )}
+                            {currentPage === 'login' && (
+                                <Login
+                                    onNavigate={navigate}
+                                />
+                            )}
+                            {currentPage === 'authenticatedHome' && (
+                                <AuthenticatedHomePageContent
+                                    onNavigate={navigate}
+                                />
+                            )}
+                            {currentPage === 'register' && (
+                                <Registration
+                                    onNavigate={navigate}
+                                />
+                            )}
+
         </AuthProvider>
     </>);
 }

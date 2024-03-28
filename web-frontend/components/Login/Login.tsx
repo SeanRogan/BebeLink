@@ -6,7 +6,6 @@ import {useAuthContext} from "@/app/context/AuthContext";
 import DefaultNavBar from "@/components/DynamicNavbar/DefaultNavBar";
 import AuthenticatedNavBar from "@/components/DynamicNavbar/AuthenticatedNavBar";
 import {NavigationProps} from "@/app/util/types";
-import {useFavoritesContext} from "@/app/context/FavoritesContext";
 
 export default function Login({onNavigate}: NavigationProps) {
 
@@ -25,7 +24,6 @@ export default function Login({onNavigate}: NavigationProps) {
     });
     const [errorShown, setErrorShown] = useState(false);
     const auth = useAuthContext();
-    const fav = useFavoritesContext();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 
@@ -53,7 +51,7 @@ export default function Login({onNavigate}: NavigationProps) {
                 header={{height: 70}}
                 padding="md">
                 <AppShell.Header>
-                    {auth.user ? <AuthenticatedNavBar onNavigate={onNavigate} onHomeClick={fav.fetchFavorites}/> :
+                    {auth.user ? <AuthenticatedNavBar onNavigate={onNavigate}/> :
                         <DefaultNavBar onNavigate={onNavigate}/>}
                 </AppShell.Header>
 

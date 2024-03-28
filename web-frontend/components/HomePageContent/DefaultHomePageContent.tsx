@@ -6,6 +6,7 @@ import DefaultNavBar from "@/components/DynamicNavbar/DefaultNavBar";
 
 import '@mantine/carousel/styles.css';
 import {NavigationProps} from "@/app/util/types";
+import HomePageLinkGen from "@/components/LinkGenerator/HomePageLinkGen";
 
 export default function DefaultHomePageContent({onNavigate}: NavigationProps) {
 
@@ -40,6 +41,7 @@ export default function DefaultHomePageContent({onNavigate}: NavigationProps) {
 
                     <Divider/>
                     {/*LINK DEMO CARD COMPONENT*/}
+                    <HomePageLinkGen/>
                     <Divider/>
                     {/*PRICING CARD*/}
                     <Space h={"lg"}/>

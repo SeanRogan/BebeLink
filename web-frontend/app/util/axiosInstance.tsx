@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 // @ts-ignore
-const baseURL = process.env.NEXT_PUBLIC_SERVER_HOSTNAME || 'http://localhost:8080';
+const baseURL = process.env.NEXT_PUBLIC_SERVER_HOSTNAME || 'http://localhost:8081';
 export const axiosInstance = axios.create({
     baseURL: `${baseURL}/api/v1`,
     withCredentials: true,
@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true; // mark it so that we don't get into an infinite loop
 
             // Attempt to get a new token
-            return axiosInstance.post('/auth/refresh')
+            return axiosInstance.post('/auth-service/auth/refresh')
                 .then(res => {
                     if (res.status === 200) {
                         // If refresh was successful
