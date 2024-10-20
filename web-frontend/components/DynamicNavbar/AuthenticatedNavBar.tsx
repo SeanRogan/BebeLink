@@ -20,8 +20,9 @@ export default function AuthenticatedNavBar({onNavigate, onHomeClick}) {
                 height: '100%',
                 width: '100%',
                 justifyContent: 'space-between',
+                background: 'linear-gradient(to right, #1a237e, #4a148c)',
                 alignItems: 'center',
-                padding: '0 16px'
+                padding: '18px 16px'
             }}>
                 <Group>
                     <ActionIcon onClick={async () => {

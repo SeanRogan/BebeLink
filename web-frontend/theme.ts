@@ -1,40 +1,58 @@
 'use client';
 
-import {createTheme, MantineThemeOverride, rem} from '@mantine/core';
+import {createTheme, MantineThemeOverride, rem, MantineColorsTuple} from '@mantine/core';
 
-const themeColors = [
-        "#fff8e0",
-        "#ffefca",
-        "#ffdd99",
-        "#ffcb62",
-        "#ffbb36",
-        "#ffb118",
-        "#ffac03",
-        "#e49600",
-        "#ca8400",
-        "#b07200"
+const themeColorsLight = [
+        "#E0EFFF", // Lightest shade
+        "#C2DFFF",
+        "#A3CFFF",
+        "#85BFFF",
+        "#66AFFF",
+        "#4263EB", // Primary color
+        "#3A59D9",
+        "#324FC7",
+        "#2A45B5",
+        "#2239A3"  // Darkest shade
     ];
 
-const brightColors = [
-        "#FFFFFF", // bright white
-        "#F0F8FF", // alice blue
-        "#E0FFFF", // light cyan
-        "#98FB98", // pale green
-        "#90EE90", // light green
-        "#000000", // black
-        "#0A0A0A", // very dark gray
-        "#141414", // darker gray
-        "#1E1E1E", // even darker gray
-        "#ffefca"
-      ];
- 
+const secondaryColorsLight = [
+        "#F7E8FF", // Lightest shade
+        "#EECFFF",
+        "#E5B6FF",
+        "#DC9DFF",
+        "#D384FF",
+        "#9967FF", // Secondary color
+        "#8A5DE6",
+        "#7B53CC",
+        "#6C49B3",
+        "#5D3F99"  // Darkest shade
+    ];
 
-// export const theme = createTheme(<MantineThemeOverride>{
-//         colors: { orange: brightColors,},
-//         headings: {
-//                 sizes: {
-//                         h1: { fontSize: ""}
-//                 }
-
-//         },
-// });
+export const theme = createTheme({
+        colorScheme: {
+            light: {colors: { 
+                primary: themeColorsLight as unknown as MantineColorsTuple,
+                secondary: secondaryColorsLight as unknown as MantineColorsTuple,
+            },
+            primaryColor: 'primary',
+            primaryShade: 5,
+            shadows: {
+                md: '0 4px 8px rgba(0, 0, 0, 0.1)',
+            },
+            components: {
+                Button: {
+                    styles: (theme) => ({
+                        root: {
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                                transform: 'translateY(-2px)',
+                                boxShadow: theme.shadows.md,
+                            },
+                        },
+                    }),
+                },
+            },},
+            dark: {},
+        },
+        
+    } as MantineThemeOverride);

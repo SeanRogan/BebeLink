@@ -1,41 +1,59 @@
 'use client';
-import {Button, Card, Group, Space, Stack, TextInput, Title} from '@mantine/core';
-import {useForm} from '@mantine/form';
+import React, { useState } from 'react';
+import { Button, TextInput, Text, Loader } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import axios from 'axios';
 
-export default function HomePageLinkGen() {
+interface HomePageLinkGenProps {
+    onLinkGenerated: (link: string) => void;
+    isLoading: boolean;
+    onError: (errorMessage: string) => void;
+}
+
+export default function HomePageLinkGen({ onLinkGenerated, isLoading, onError }: HomePageLinkGenProps) {
+    const [generatedLink, setGeneratedLink] = useState('');
+
     const form = useForm({
         initialValues: {
             url: '',
         },
-
         validate: {
-            // Validate the url to make sure it starts with http:// or https://
             url: (value) =>
-                /^(http:\/\/|https:\/\/).+/.test(value) ? null : 'Please enter a valid URL.(starts with http:// or https://)',
+                /^(http:\/\/|https:\/\/).+/.test(value) ? null : 'Please enter a valid URL (starts with http:// or https://)',
         },
     });
 
-    const handleSubmit = (values) => {
-        // Handle the submission of the form
-        // You can perform actions such as routing or fetching data based on the URL here
-        alert(`URL: ${values.url}`);
+    const handleSubmit = async (values) => {
+        try {
+            const response = await axios.post('http://localhost:8081/generator-service/generate', {
+                longUrl: values.url
+            });
+
+            const shortUrl = response.data.shortUrl;
+            setGeneratedLink(shortUrl);
+            onLinkGenerated(shortUrl);
+        } catch (error) {
+            console.error('Error generating short URL:', error);
+            onError(`There was an error. Please contact support.`);
+        }
     };
 
     return (
-        <Card shadow="xl" padding="lg" radius="md" withBorder style={{maxWidth: 400, margin: 'auto'}}>
-            <Stack>
-            <Title size="2.2rem">Shorten a long URL</Title>
-            <Group justify="flex-start">
-                <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <TextInput
-                        placeholder="Enter your link here"
-                        {...form.getInputProps('url')}
-                    />
-
-                </form>
-                    <Button type="submit">Get My URL!</Button>
-            </Group>
-            </Stack>
-        </Card>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+            <TextInput
+                required
+                label="Enter your long URL"
+                placeholder="https://example.com"
+                {...form.getInputProps('url')}
+            />
+            <Button type="submit" loading={isLoading}>
+                Generate Short URL
+            </Button>
+            {generatedLink && (
+                <Text>
+                    Your shortened URL: <a href={generatedLink} target="_blank" rel="noopener noreferrer">{generatedLink}</a>
+                </Text>
+            )}
+        </form>
     );
-};
+}

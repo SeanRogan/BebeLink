@@ -46,7 +46,10 @@ export default function Login({onNavigate}: NavigationProps) {
         <AppShell header={{height: 70}} padding="md">
             <AppShell.Header>
                 {auth.user ? (
-                    <AuthenticatedNavBar onNavigate={onNavigate} />
+                    <AuthenticatedNavBar 
+                        onNavigate={onNavigate} 
+                        onHomeClick={() => onNavigate('authenticatedHome')}
+                    />
                 ) : (
                     <DefaultNavBar onNavigate={onNavigate} />
                 )}
